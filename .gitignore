@@ -1,0 +1,9 @@
+# 排除数据集和处理后的数据
+dataset/
+processed/
+checkpoints/
+logs/
+
+# 排除 python 缓存
+**/__pycache__/
+*.pyc
