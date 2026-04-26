@@ -15,7 +15,7 @@ os.environ["RAY_worker_register_timeout_seconds"] = "600"
 from models import NewsRecommender
 from dataset import MINDDataset
 
-SIGMA = 0.01 # 设置为 0.001 或 0.01 来启用差分隐私增强模式，设为 0 则为原始联邦学习模式
+SIGMA = 0 # 设置为 0.001 或 0.01 来启用差分隐私增强模式，设为 0 则为原始联邦学习模式
 
 # --- 1. 环境与资源配置 ---
 device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
@@ -108,7 +108,8 @@ def get_evaluate_fn():
         if server_round not in eval_rounds:
             return 0.0, {} 
 
-        model = NewsRecommender(embedding_dim=384).to(device)
+        # model = NewsRecommender(embedding_dim=384).to(device)
+        model = NewsRecommender(embedding_dim=384, use_attention=False).to(device)
         params_dict = zip(model.state_dict().keys(), parameters)
         state_dict = OrderedDict({k: torch.tensor(v) for k, v in params_dict})
         model.load_state_dict(state_dict, strict=True)
@@ -142,7 +143,7 @@ def get_evaluate_fn():
         # 保存模型逻辑
         if server_round % 10 == 0 and server_round > 0:
             if not os.path.exists(CHECKPOINT_DIR): os.makedirs(CHECKPOINT_DIR)
-            save_path = os.path.join(CHECKPOINT_DIR, f'fed_model_dp_0.01.pth')
+            save_path = os.path.join(CHECKPOINT_DIR, f'fed_model_ablation.pth')
             torch.save(model.state_dict(), save_path)
             print(f"💾 模型已存档至: {save_path}")
 
