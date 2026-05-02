@@ -1,0 +1,42 @@
+\contentsline {section}{摘要}{I}{figure.caption.2}%
+\contentsline {section}{ABSTRACT}{II}{figure.caption.2}%
+\contentsline {section}{\numberline {1}绪论}{1}{section.1}%
+\contentsline {subsection}{\numberline {1.1}研究背景与意义}{1}{subsection.1.1}%
+\contentsline {subsection}{\numberline {1.2}国内外研究现状}{1}{subsection.1.2}%
+\contentsline {subsubsection}{\numberline {1.2.1}新闻推荐算法研究现状}{1}{subsubsection.1.2.1}%
+\contentsline {subsubsection}{\numberline {1.2.2}联邦学习与隐私保护研究现状}{2}{subsubsection.1.2.2}%
+\contentsline {subsection}{\numberline {1.3}本文主要研究内容}{2}{subsection.1.3}%
+\contentsline {subsection}{\numberline {1.4}论文组织结构}{3}{subsection.1.4}%
+\contentsline {section}{\numberline {2}相关技术综述}{4}{section.2}%
+\contentsline {subsection}{\numberline {2.1}自然语言处理与文本表示技术}{4}{subsection.2.1}%
+\contentsline {subsection}{\numberline {2.2}联邦学习理论基础}{4}{subsection.2.2}%
+\contentsline {subsection}{\numberline {2.3}差分隐私与安全聚合概述}{5}{subsection.2.3}%
+\contentsline {subsection}{\numberline {2.4}本章小结}{5}{subsection.2.4}%
+\contentsline {section}{\numberline {3}模型设计与方法}{6}{section.3}%
+\contentsline {subsection}{\numberline {3.1}总体框架}{6}{subsection.3.1}%
+\contentsline {subsection}{\numberline {3.2}新闻表示模块}{6}{subsection.3.2}%
+\contentsline {subsection}{\numberline {3.3}用户表示模块}{6}{subsection.3.3}%
+\contentsline {subsection}{\numberline {3.4}匹配与排序模块}{7}{subsection.3.4}%
+\contentsline {subsection}{\numberline {3.5}联邦训练与隐私增强策略}{7}{subsection.3.5}%
+\contentsline {subsection}{\numberline {3.6}本章小结}{8}{subsection.3.6}%
+\contentsline {section}{\numberline {4}系统实现与实验设置}{9}{section.4}%
+\contentsline {subsection}{\numberline {4.1}数据预处理流程}{9}{subsection.4.1}%
+\contentsline {subsection}{\numberline {4.2}联邦实验设置}{9}{subsection.4.2}%
+\contentsline {subsection}{\numberline {4.3}评价指标与记录方式}{9}{subsection.4.3}%
+\contentsline {subsection}{\numberline {4.4}半同态加密原型设计}{10}{subsection.4.4}%
+\contentsline {subsection}{\numberline {4.5}本章小结}{10}{subsection.4.5}%
+\contentsline {section}{\numberline {5}实验结果与分析}{11}{section.5}%
+\contentsline {subsection}{\numberline {5.1}中心化基线与联邦主实验结果分析}{11}{subsection.5.1}%
+\contentsline {subsection}{\numberline {5.2}差分隐私增强实验分析}{11}{subsection.5.2}%
+\contentsline {subsection}{\numberline {5.3}消融实验分析}{12}{subsection.5.3}%
+\contentsline {subsection}{\numberline {5.4}Non-IID 实验分析}{12}{subsection.5.4}%
+\contentsline {subsection}{\numberline {5.5}训练与通信开销分析}{13}{subsection.5.5}%
+\contentsline {subsection}{\numberline {5.6}本章小结}{13}{subsection.5.6}%
+\contentsline {section}{\numberline {6}结论与展望}{14}{section.6}%
+\contentsline {subsection}{\numberline {6.1}主要结论}{14}{subsection.6.1}%
+\contentsline {subsection}{\numberline {6.2}不足与展望}{14}{subsection.6.2}%
+\contentsline {section}{参考文献}{15}{subsection.6.2}%
+\contentsline {section}{附录A：安全聚合原型补充说明}{16}{subsection.6.2}%
+\contentsline {section}{致谢}{17}{equation.6.1}%
+\contentsline {section}{原创性声明和使用授权书}{18}{equation.6.1}%
+\contentsfinish 

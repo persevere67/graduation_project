@@ -1,79 +1,156 @@
+import argparse
+import os
+import pickle
+
+import numpy as np
+import pandas as pd
 import torch
 import torch.nn as nn
 import torch.optim as optim
 from torch.utils.data import DataLoader
-import numpy as np
-import os
-import pickle
 
-# 导入你之前的类
-from models import NewsRecommender
 from dataset import MINDDataset
+from experiments.experiment_logger import log_round_metric, log_experiment_summary, make_run_id
+from models import NewsRecommender
 
-def train():
-    # 1. 配置路径与设备
+
+def parse_args():
+    parser = argparse.ArgumentParser(description="Train the centralized baseline model.")
+    parser.add_argument("--epochs", type=int, default=5, help="Number of training epochs.")
+    parser.add_argument("--batch-size", type=int, default=64, help="Training batch size.")
+    parser.add_argument("--lr", type=float, default=1e-3, help="Learning rate.")
+    parser.add_argument(
+        "--use-attention",
+        action="store_true",
+        default=True,
+        help="Enable multi-head attention in the user encoder.",
+    )
+    parser.add_argument(
+        "--disable-attention",
+        dest="use_attention",
+        action="store_false",
+        help="Disable multi-head attention for ablation experiments.",
+    )
+    parser.add_argument(
+        "--output-name",
+        type=str,
+        default=None,
+        help="Optional checkpoint filename. Defaults to a name derived from the experiment config.",
+    )
+    return parser.parse_args()
+
+
+def build_output_name(args):
+    if args.output_name:
+        return args.output_name
+    suffix = "attn" if args.use_attention else "mean"
+    return f"centralized_{suffix}_e{args.epochs}.pth"
+
+
+def train(args):
     device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
-    print(f"使用设备: {device}")
-    
-    BASE_DIR = os.path.dirname(os.path.abspath(__file__))
-    PROCESSED_DIR = os.path.join(BASE_DIR, 'processed')
+    print(f"Using device: {device}")
 
-    # 2. 加载 Embedding 矩阵 (核心！)
-    print("正在加载全量 Embedding 矩阵...")
-    news_embeddings = np.load(os.path.join(PROCESSED_DIR, 'news_embeddings.npy'))
-    # 转为 Tensor 并转到 GPU，之后通过索引直接取值
+    base_dir = os.path.dirname(os.path.abspath(__file__))
+    processed_dir = os.path.join(base_dir, "processed")
+    checkpoint_dir = os.path.join(base_dir, "checkpoints")
+    os.makedirs(checkpoint_dir, exist_ok=True)
+
+    print("Loading precomputed news embeddings...")
+    news_embeddings = np.load(os.path.join(processed_dir, "news_embeddings.npy"))
     news_embeddings = torch.FloatTensor(news_embeddings).to(device)
 
-    # 3. 整合所有客户端数据用于中心化训练
-    print("正在整合训练数据...")
-    with open(os.path.join(PROCESSED_DIR, 'federated_data.pkl'), 'rb') as f:
+    print("Loading training data...")
+    with open(os.path.join(processed_dir, "federated_data.pkl"), "rb") as f:
         federated_data = pickle.load(f)
-    with open(os.path.join(PROCESSED_DIR, 'news_id_dict.pkl'), 'rb') as f:
+    with open(os.path.join(processed_dir, "news_id_dict.pkl"), "rb") as f:
         news_id_dict = pickle.load(f)
 
-    # 将 50 个客户端的数据合并成一个大的 DataFrame
-    all_train_df = pd.concat(federated_data.values())
+    all_train_df = pd.concat(federated_data.values(), ignore_index=True)
     train_dataset = MINDDataset(all_train_df, news_id_dict)
-    train_loader = DataLoader(train_dataset, batch_size=64, shuffle=True)
+    train_loader = DataLoader(train_dataset, batch_size=args.batch_size, shuffle=True)
 
-    # 4. 初始化模型
-    model = NewsRecommender(embedding_dim=384).to(device)
-    optimizer = optim.Adam(model.parameters(), lr=0.001)
-    criterion = nn.CrossEntropyLoss() # 因为我们的 label 永远是 0 (正样本在第一位)
+    model = NewsRecommender(embedding_dim=384, use_attention=args.use_attention).to(device)
+    optimizer = optim.Adam(model.parameters(), lr=args.lr)
+    criterion = nn.CrossEntropyLoss()
+    experiment_id = f"centralized_{'attn' if args.use_attention else 'mean'}_e{args.epochs}"
+    run_id = make_run_id(experiment_id)
 
-    # 5. 训练循环
     model.train()
-    print("开始训练...")
-    for epoch in range(5): # 先跑 5 个 Epoch 看看
-        total_loss = 0
+    print(
+        f"Starting centralized training | use_attention={args.use_attention} "
+        f"| epochs={args.epochs} | batch_size={args.batch_size} | lr={args.lr}"
+    )
+    for epoch in range(args.epochs):
+        total_loss = 0.0
         for batch_idx, (hist_idx, cand_idx, label) in enumerate(train_loader):
-            hist_idx, cand_idx, label = hist_idx.to(device), cand_idx.to(device), label.to(device)
-            
-            # --- 关键步：根据索引查 Embedding ---
-            # news_embeddings 是 [65238, 384]
-            # hist_idx 是 [64, 50] -> 取完后变 [64, 50, 384]
+            hist_idx = hist_idx.to(device)
+            cand_idx = cand_idx.to(device)
+            label = label.to(device)
+
             hist_vecs = news_embeddings[hist_idx]
             cand_vecs = news_embeddings[cand_idx]
-            
-            # 前向传播
+
             optimizer.zero_grad()
-            scores = model(hist_vecs, cand_vecs) # [64, 5]
-            
+            scores = model(hist_vecs, cand_vecs)
             loss = criterion(scores, label)
             loss.backward()
             optimizer.step()
-            
-            total_loss += loss.item()
-            
-            if batch_idx % 100 == 0:
-                print(f"Epoch {epoch} | Batch {batch_idx} | Loss: {loss.item():.4f}")
-        
-        print(f"Epoch {epoch} 完成，平均 Loss: {total_loss/len(train_loader):.4f}")
 
-    # 6. 保存模型
-    torch.save(model.state_dict(), os.path.join(BASE_DIR, 'checkpoints', 'centralized_model.pth'))
-    print("✅ 模型已保存至 checkpoints 文件夹")
+            total_loss += loss.item()
+            if batch_idx % 100 == 0:
+                print(f"Epoch {epoch + 1}/{args.epochs} | Batch {batch_idx} | Loss: {loss.item():.4f}")
+
+        epoch_loss = total_loss / len(train_loader)
+        print(f"Epoch {epoch + 1}/{args.epochs} finished | Avg Loss: {epoch_loss:.4f}")
+        log_round_metric(
+            {
+                "run_id": run_id,
+                "experiment_id": experiment_id,
+                "experiment_type": "centralized_train",
+                "generated_at": pd.Timestamp.now().isoformat(),
+                "round": epoch + 1,
+                "loss": epoch_loss,
+                "auc": "",
+                "mrr": "",
+                "sigma": 0,
+                "use_attention": args.use_attention,
+                "num_clients": "",
+                "num_rounds": args.epochs,
+                "batch_size": args.batch_size,
+                "checkpoint_path": "",
+                "notes": "epoch average training loss",
+            }
+        )
+
+    output_name = build_output_name(args)
+    save_path = os.path.join(checkpoint_dir, output_name)
+    torch.save(model.state_dict(), save_path)
+    print(f"Saved checkpoint to: {save_path}")
+    log_experiment_summary(
+        {
+            "run_id": run_id,
+            "experiment_id": experiment_id,
+            "experiment_type": "centralized_train",
+            "generated_at": pd.Timestamp.now().isoformat(),
+            "model_name": experiment_id,
+            "model_path": save_path,
+            "best_round": "",
+            "final_round": args.epochs,
+            "final_loss": epoch_loss,
+            "final_auc": "",
+            "final_mrr": "",
+            "use_attention": args.use_attention,
+            "sigma": 0,
+            "num_clients": "",
+            "num_rounds": args.epochs,
+            "batch_size": args.batch_size,
+            "lr": args.lr,
+            "epochs": args.epochs,
+            "notes": "centralized training finished",
+        }
+    )
+
 
 if __name__ == "__main__":
-    import pandas as pd # 临时加一下，确保合并数据成功
-    train()
+    train(parse_args())

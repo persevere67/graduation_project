@@ -1,9 +1,8 @@
 import pickle
 import os
 
-# 路径指向你处理好的训练数据
-current_dir = os.path.dirname(os.path.abspath(__file__))
-pkl_path = os.path.join(current_dir, 'processed', 'federated_data.pkl')
+base_dir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+pkl_path = os.path.join(base_dir, "processed", "federated_data.pkl")
 
 with open(pkl_path, 'rb') as f:
     data = pickle.load(f)

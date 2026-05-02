@@ -9,19 +9,19 @@ import random # 别忘了加上这个，dataset.py 里用到了
 from dataset import MINDDataset
 
 def test():
-    current_dir = os.path.dirname(os.path.abspath(__file__))
-    processed_path = os.path.join(current_dir, 'processed')
+    base_dir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+    processed_path = os.path.join(base_dir, "processed")
 
     # 1. 加载必要的字典和数据
     print("正在加载数据...")
-    with open(os.path.join(processed_path, 'news_id_dict.pkl'), 'rb') as f:
+    with open(os.path.join(processed_path, "news_id_dict.pkl"), "rb") as f:
         news_id_dict = pickle.load(f)
     
-    with open(os.path.join(processed_path, 'federated_data.pkl'), 'rb') as f:
+    with open(os.path.join(processed_path, "federated_data.pkl"), "rb") as f:
         federated_data = pickle.load(f)
 
     # 取出一个客户端的数据进行测试
-    client_0_df = federated_data['client_0']
+    client_0_df = federated_data["client_0"]
     
     # 2. 实例化 Dataset
     print("正在初始化 Dataset...")

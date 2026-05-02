@@ -1,0 +1,26 @@
+run_id,experiment_id,experiment_type,generated_at,round,loss,auc,mrr,sigma,use_attention,num_clients,num_rounds,batch_size,checkpoint_path,notes
+centralized_attn_e5_20260427_230134,centralized_attn_e5,centralized_train,2026-04-27T23:01:53.391615,1,1.3942886363159708,,,0,True,,5,64,,epoch average training loss
+centralized_attn_e5_20260427_230134,centralized_attn_e5,centralized_train,2026-04-27T23:02:10.672620,2,1.3598437654684228,,,0,True,,5,64,,epoch average training loss
+centralized_attn_e5_20260427_230134,centralized_attn_e5,centralized_train,2026-04-27T23:02:28.771884,3,1.341632759541298,,,0,True,,5,64,,epoch average training loss
+centralized_attn_e5_20260427_230134,centralized_attn_e5,centralized_train,2026-04-27T23:02:46.041160,4,1.3264060383484226,,,0,True,,5,64,,epoch average training loss
+centralized_attn_e5_20260427_230134,centralized_attn_e5,centralized_train,2026-04-27T23:03:03.400366,5,1.3116328488480142,,,0,True,,5,64,,epoch average training loss
+fed_attn_nodp_r10_20260427_232704,fed_attn_nodp_r10,federated,2026-04-27T23:28:58.034465,0,,0.47863627392934677,0.444716513011362,0.0,True,50,10,32,,server-side evaluation round
+fed_attn_nodp_r10_20260427_232704,fed_attn_nodp_r10,federated,2026-04-27T23:31:02.050459,1,,0.6211727142011334,0.550902666177977,0.0,True,50,10,32,,server-side evaluation round
+fed_attn_nodp_r10_20260427_232704,fed_attn_nodp_r10,federated,2026-04-27T23:34:11.851245,5,,0.6462967661901943,0.5737298767938199,0.0,True,50,10,32,F:\ graduation_project\checkpoints\fed_attn_nodp_r10_round_5.pth,server-side evaluation round
+fed_attn_nodp_r10_20260427_232704,fed_attn_nodp_r10,federated,2026-04-27T23:38:14.942105,10,,0.6411197101694437,0.5692217147368123,0.0,True,50,10,32,F:\ graduation_project\checkpoints\fed_attn_nodp_r10_round_10.pth,server-side evaluation round
+fed_attn_dp0.001_r10_20260427_234132,fed_attn_dp0.001_r10,federated,2026-04-27T23:42:54.949857,0,,0.4796230511150582,0.44805933820143407,0.001,True,50,10,32,,server-side evaluation round
+fed_attn_dp0.001_r10_20260427_234132,fed_attn_dp0.001_r10,federated,2026-04-27T23:44:45.503429,1,,0.624809692971327,0.556230558139972,0.001,True,50,10,32,,server-side evaluation round
+fed_attn_dp0.001_r10_20260427_234132,fed_attn_dp0.001_r10,federated,2026-04-27T23:47:57.100634,5,,0.6412007668668415,0.5710698074374807,0.001,True,50,10,32,F:\ graduation_project\checkpoints\fed_attn_dp0.001_r10_round_5.pth,server-side evaluation round
+fed_attn_dp0.001_r10_20260427_234132,fed_attn_dp0.001_r10,federated,2026-04-27T23:51:41.327361,10,,0.6441223321773943,0.5734453560386066,0.001,True,50,10,32,F:\ graduation_project\checkpoints\fed_attn_dp0.001_r10_round_10.pth,server-side evaluation round
+fed_mean_nodp_r10_20260427_235807,fed_mean_nodp_r10,federated,2026-04-27T23:59:14.580491,0,,0.5226430122078435,0.47627294256956776,0.0,False,50,10,32,,server-side evaluation round
+fed_mean_nodp_r10_20260427_235807,fed_mean_nodp_r10,federated,2026-04-28T00:00:26.948101,1,,0.5213848712960614,0.4749299858092043,0.0,False,50,10,32,,server-side evaluation round
+fed_mean_nodp_r10_20260427_235807,fed_mean_nodp_r10,federated,2026-04-28T00:02:35.485016,5,,0.5226553469226649,0.4758730628624057,0.0,False,50,10,32,F:\ graduation_project\checkpoints\fed_mean_nodp_r10_round_5.pth,server-side evaluation round
+fed_mean_nodp_r10_20260427_235807,fed_mean_nodp_r10,federated,2026-04-28T00:04:56.062539,10,,0.5212474273309087,0.4750582668433468,0.0,False,50,10,32,F:\ graduation_project\checkpoints\fed_mean_nodp_r10_round_10.pth,server-side evaluation round
+fed_attn_dp0.01_r10_20260428_001548,fed_attn_dp0.01_r10,federated,2026-04-28T00:17:15.628730,0,,0.5039964476021315,0.4636125912768897,0.01,True,50,10,32,,server-side evaluation round
+fed_attn_dp0.01_r10_20260428_001548,fed_attn_dp0.01_r10,federated,2026-04-28T00:20:38.677486,1,,0.6133983196594209,0.5471113272623043,0.01,True,50,10,32,,server-side evaluation round
+fed_attn_dp0.01_r10_20260428_001548,fed_attn_dp0.01_r10,federated,2026-04-28T00:26:38.797568,5,,0.6366228255659871,0.5666340090407587,0.01,True,50,10,32,F:\ graduation_project\checkpoints\fed_attn_dp0.01_r10_round_5.pth,server-side evaluation round
+fed_attn_dp0.01_r10_20260428_001548,fed_attn_dp0.01_r10,federated,2026-04-28T00:33:44.085495,10,,0.64445008317122,0.5717267191068257,0.01,True,50,10,32,F:\ graduation_project\checkpoints\fed_attn_dp0.01_r10_round_10.pth,server-side evaluation round
+fed_attn_noniid_nodp_r10_20260502_202800,fed_attn_noniid_nodp_r10,federated,2026-05-02T20:29:59.283639,0,,0.5220932363472328,0.4794698657043239,0.0,True,50,10,32,,server-side evaluation round
+fed_attn_noniid_nodp_r10_20260502_202800,fed_attn_noniid_nodp_r10,federated,2026-05-02T20:31:46.250419,1,,0.5619801798753842,0.5054759085398517,0.0,True,50,10,32,,server-side evaluation round
+fed_attn_noniid_nodp_r10_20260502_202800,fed_attn_noniid_nodp_r10,federated,2026-05-02T20:41:02.859472,5,,0.6447073500803518,0.5764308269192816,0.0,True,50,10,32,F:\ graduation_project\checkpoints\fed_attn_noniid_nodp_r10_round_5.pth,server-side evaluation round
+fed_attn_noniid_nodp_r10_20260502_202800,fed_attn_noniid_nodp_r10,federated,2026-05-02T20:45:07.269703,10,,0.6335532436775776,0.5633001118347477,0.0,True,50,10,32,F:\ graduation_project\checkpoints\fed_attn_noniid_nodp_r10_round_10.pth,server-side evaluation round

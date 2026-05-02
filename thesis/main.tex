@@ -1,0 +1,611 @@
+\documentclass[UTF8,a4paper,12pt]{ctexart}
+\usepackage[left=3cm, right=3cm]{geometry}
+
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{amsthm}
+\usepackage{array}
+\usepackage{booktabs}
+\usepackage{caption}
+\usepackage{graphicx}
+\usepackage{color}
+\usepackage{tikz}
+\usepackage{mathrsfs}
+\usepackage{dutchcal}
+\usepackage{fancyhdr}
+\usepackage{hyperref}
+\usepackage{appendix}
+\usepackage{tocloft}
+\usepackage{titletoc}
+\usepackage{setspace}
+\usepackage{titlesec}
+\usepackage{float}
+
+\numberwithin{equation}{section}
+\renewcommand\thesection{\arabic{section}}
+\renewcommand{\thefigure}{\thesection{}.\arabic{figure}}
+\renewcommand{\thetable}{\thesection{}.\arabic{table}}
+\allowdisplaybreaks[4]
+\setstretch{1.25}
+
+\pagestyle{fancy}
+\fancyhf{}
+\fancyfoot[C]{\thepage}
+\hypersetup{colorlinks=true,linkcolor=black}
+\captionsetup{font={small},labelsep=quad}
+\setmainfont{Times New Roman}
+
+\titleformat{\section}{\heiti\zihao{3}\centering}{\thesection}{0.5em}{}[]
+\titleformat{\subsection}{\heiti\zihao{-3}}{\thesubsection}{0.5em}{}[]
+\titleformat{\subsubsection}{\heiti\zihao{4}}{\thesubsubsection}{0.5em}{}[]
+
+\titlecontents{section}[0pt]{\addvspace{0pt}\filright\heiti\zihao{4}}
+{\contentspush{\thecontentslabel \quad}}{}{\titlerule*[8pt]{.}\contentspage}
+\titlecontents{subsection}[1em]{\addvspace{0pt}\filright\heiti\zihao{5}}
+{\contentspush{\thecontentslabel \quad}}{}{\titlerule*[8pt]{.}\contentspage}
+\titlecontents{subsubsection}[2em]{\addvspace{0pt}\filright\songti\zihao{5}}
+{\contentspush{\thecontentslabel \quad}}{}{\titlerule*[8pt]{.}\contentspage}
+
+\renewcommand{\cftsecleader}{\cftdotfill{\cftdotsep}}
+
+\makeatletter
+\def\headrule{{\if@fancyplain\let\headrulewidth\plainheadrulewidth\fi%
+\hrule\@height 0.5pt \@width\headwidth\vskip1.5pt%
+\vskip-2\headrulewidth\vskip-1pt}}
+\makeatother
+
+\setlength{\headheight}{14.48167pt}
+\setlength{\voffset}{-1.14cm}
+\setlength{\topmargin}{0cm}
+\setlength{\headsep}{2.5cm}
+
+\begin{document}
+\thispagestyle{empty}
+
+\begin{center}
+\heiti\zihao{-2} 重庆大学本科学生毕业论文（设计）
+\end{center}
+
+\begin{center}
+\heiti\zihao{2} 基于联邦学习的隐私保护新闻推荐算法研究
+\end{center}
+
+\renewcommand{\headrulewidth}{1pt}
+\begin{figure}[H]
+\centering
+\includegraphics[width=5cm]{fig1.png}
+\end{figure}
+
+\begin{center}
+\heiti\zihao{4}
+\begin{tabular}{l}
+学\qquad 生：魏美洋\\
+学\qquad 号：20221734\\
+指导教师：蔡斌\\
+助理指导教师：李XX\\
+专\qquad 业：数据科学与大数据技术\\
+\end{tabular}
+\end{center}
+
+\begin{center}
+\heiti\zihao{-2} 重庆大学大数据与软件学院
+\end{center}
+
+\begin{center}
+\heiti\zihao{3} 2026年6月
+\end{center}
+
+\newpage
+\thispagestyle{empty}
+\begin{center}
+\zihao{3}\textbf{Undergraduate Thesis (Design) of Chongqing University}
+\end{center}
+
+\begin{center}
+\zihao{2}\textbf{Study on Privacy-Preserving News Recommendation Algorithm Based on Federated Learning}
+\end{center}
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=5cm]{fig1.png}
+\end{figure}
+
+\begin{center}
+\zihao{3}\textbf{By}\\
+\textbf{WEI Meiyang}
+\end{center}
+
+\begin{center}
+\zihao{3}\textbf{Supervised by}\\
+\textbf{Prof. CAI Bin}
+\end{center}
+
+\begin{center}
+\zihao{-2}\textbf{Data Science and Big Data Technology}\\
+\textbf{School of Big Data and Software Engineering}\\
+\textbf{Chongqing University}
+\end{center}
+
+\begin{center}
+\zihao{3}\textbf{June 2026}
+\end{center}
+
+\newpage
+\pagestyle{fancy}
+\pagenumbering{Roman}
+\fancyhead[LH]{\songti\zihao{-5} 重庆大学本科学生毕业论文（设计）}
+\fancyhead[RH]{\songti\zihao{-5} 摘要}
+
+\addcontentsline{toc}{section}{摘要}
+\section*{摘\quad 要}
+\zihao{-4}
+随着移动互联网与社交媒体平台的迅速发展，新闻内容的生产与传播规模持续扩大，用户在海量资讯中面临显著的信息过载问题。个性化新闻推荐系统通过建模用户兴趣偏好，为用户提供更加相关的候选新闻，已经成为门户网站与内容平台的重要基础能力。然而，传统中心化推荐方法通常要求将用户点击历史、浏览行为等敏感数据集中上传至服务器进行统一训练，这种模式在带来性能提升的同时，也引入了潜在的隐私泄露风险与合规压力。如何在保护用户隐私的前提下实现高质量新闻推荐，成为当前推荐系统研究中的重要问题。
+
+本文围绕隐私保护新闻推荐任务，提出并实现了一种基于联邦学习的新闻推荐方法。首先，在新闻表示模块中，采用预训练的 Sentence-BERT 模型对新闻标题与摘要进行语义编码，生成稠密新闻向量；其次，在用户建模模块中，引入多头自注意力机制，对用户历史点击序列进行兴趣聚合，以增强用户动态偏好的表达能力；最后，基于 Flower 框架构建联邦训练流程，在不上传原始用户行为数据的条件下完成模型参数的多轮聚合更新。为了进一步评估隐私增强与模型结构设计的影响，本文还补充进行了差分隐私噪声实验、注意力消融实验、Non-IID 数据划分实验以及训练与通信开销分析，并设计了一个面向安全聚合的半同态加密原型。
+
+实验部分基于 MINDsmall 数据集展开。结果表明：在中心化基线实验中，模型取得了 0.6044 的 AUC 和 0.3126 的 MRR；在 IID 条件下的联邦主实验中，模型经过 10 轮训练后取得了 0.6411 的 AUC 和 0.5692 的 MRR，表现出较好的推荐性能。加入轻量级高斯噪声后，模型在 $\sigma=0.001$ 与 $\sigma=0.01$ 设置下均未出现明显性能下降，说明方法在当前实验范围内具有一定鲁棒性。消融实验表明，去除注意力机制后模型性能显著下降，验证了注意力模块在用户兴趣建模中的有效性。Non-IID 实验进一步说明，在更贴近真实联邦场景的数据分布下，模型性能略有下降但仍保持较好收敛能力。训练与通信开销分析表明，联邦训练相较中心化训练引入了额外时间与通信代价，但在当前模型规模下仍具有一定工程可行性。
+
+综上，本文完成了一个基于联邦学习的隐私保护新闻推荐实验系统设计与实现，并从推荐效果、隐私增强、分布异质性适应能力、系统开销和安全扩展性等多个角度验证了方法的合理性与可行性。
+
+\vspace{1em}
+\noindent\heiti\zihao{-4}关键词：联邦学习；新闻推荐；隐私保护；注意力机制；安全聚合
+
+\newpage
+\fancyhead[LH]{\songti\zihao{-5} 重庆大学本科学生毕业论文（设计）}
+\fancyhead[RH]{\zihao{-5} ABSTRACT}
+
+\addcontentsline{toc}{section}{ABSTRACT}
+\titleformat{\section}[block]{\centering\bfseries\fontspec{Times New Roman}\fontsize{16pt}{20pt}\selectfont}{\thesection}{1em}{}[]
+\section*{ABSTRACT}
+With the rapid growth of mobile Internet and social media platforms, the scale of news production and distribution continues to expand, and users are facing severe information overload. Personalized news recommendation systems aim to model user interests and provide more relevant candidate news, and have become a key capability for content platforms. However, traditional centralized recommendation approaches usually require uploading sensitive user behavior data, such as click history and browsing records, to a central server for unified model training. Although this setting can improve recommendation performance, it also introduces privacy leakage risks and compliance pressure. Therefore, how to achieve high-quality news recommendation while protecting user privacy has become an important research issue.
+
+This thesis proposes and implements a federated-learning-based news recommendation method for privacy-preserving recommendation. First, in the news representation module, a pre-trained Sentence-BERT model is used to encode news titles and abstracts into dense semantic vectors. Second, in the user modeling module, a multi-head self-attention mechanism is introduced to aggregate users' historical click sequences, so as to better capture dynamic user interests. Third, based on the Flower framework, a federated training pipeline is built to complete multi-round model aggregation without uploading raw user behavior data. In addition, differential privacy noise experiments, attention ablation experiments, Non-IID data partition experiments, overhead analysis, and a semi-homomorphic encryption prototype are included to further examine the proposed method.
+
+Experiments are conducted on the MINDsmall dataset. The results show that the centralized baseline achieves an AUC of 0.6044 and an MRR of 0.3126. Under the IID federated setting, the main federated experiment achieves an AUC of 0.6411 and an MRR of 0.5692 after 10 communication rounds. When lightweight Gaussian noise is added, the model does not suffer an obvious performance drop under $\sigma=0.001$ and $\sigma=0.01$, indicating a certain level of robustness in the current setting. The ablation experiment shows that removing the attention mechanism causes a significant performance decline, which verifies the effectiveness of the attention-based user encoder. The Non-IID experiment further shows that the model still maintains acceptable convergence under a more heterogeneous client distribution, although the final performance becomes slightly lower. The overhead analysis demonstrates that federated training introduces additional time and communication costs compared with centralized training, but remains feasible under the current model size.
+
+Overall, this thesis completes the design and implementation of a privacy-preserving news recommendation system based on federated learning, and verifies its effectiveness from the perspectives of recommendation quality, privacy enhancement, robustness under heterogeneous data, system overhead, and secure aggregation extensibility.
+
+\vspace{1em}
+\noindent\textbf{Key words}: Federated Learning; News Recommendation; Privacy Protection; Attention Mechanism; Secure Aggregation
+
+\newpage
+\titleformat{\section}{\heiti\zihao{3}\centering}{\thesection}{0.5em}{}[]
+\fancyhead[LH]{\songti\zihao{-5} 重庆大学本科学生毕业论文（设计）}
+\fancyhead[RH]{\songti\zihao{-5} 目录}
+\renewcommand\contentsname{目\quad 录}
+
+\begin{center}
+\tableofcontents
+\end{center}
+
+\newpage
+\pagenumbering{arabic}
+\fancyhead[LH]{\songti\zihao{-5} 重庆大学本科学生毕业论文（设计）}
+\fancyhead[RH]{\songti\zihao{-5} 1\quad 绪论}
+
+\section{绪论}
+\subsection{研究背景与意义}
+\zihao{-4}
+在数字内容平台高速发展的背景下，用户接触新闻内容的方式已经从传统门户首页展示逐步转向以算法驱动的个性化分发。推荐系统能够在短时间内为用户筛选更符合兴趣的新闻内容，降低信息检索成本，提高用户留存与交互效率，因此被广泛应用于新闻客户端、社交媒体与内容社区。然而，新闻推荐场景具有明显的数据敏感性。用户的点击历史、停留行为、浏览序列以及兴趣偏好，不仅反映其阅读习惯，也可能映射其社会关注、消费倾向甚至价值偏好。一旦这些数据在中心服务器中被集中存储与训练，便会带来较大的隐私泄露风险。
+
+近年来，数据安全与个人信息保护相关法律法规持续完善。无论是欧盟的《通用数据保护条例》（GDPR），还是我国的《个人信息保护法》（PIPL），都对个人数据的采集、存储、处理与使用提出了更加严格的要求。传统中心化推荐训练模式面临越来越突出的合规压力。在此背景下，联邦学习通过“数据不动、模型动”的思想，为隐私保护推荐提供了新的技术路径。通过在本地设备上完成模型训练，仅上传参数更新而非原始数据，联邦学习有望在不显著牺牲推荐性能的前提下增强用户隐私保护能力。
+
+因此，研究一种基于联邦学习的隐私保护新闻推荐方法，不仅具有明确的学术研究价值，也具有现实应用意义。该研究有助于探索推荐效果、训练效率与隐私保护之间的平衡关系，为隐私友好型内容分发系统提供参考。
+
+\subsection{国内外研究现状}
+\subsubsection{新闻推荐算法研究现状}
+\zihao{-4}
+新闻推荐算法经历了从基于内容过滤、协同过滤到深度学习建模的演进过程。早期方法通常使用 TF-IDF、主题模型或矩阵分解等技术处理新闻文本与用户偏好，但在语义表达能力与复杂兴趣建模方面存在明显局限。随着深度学习的发展，基于卷积神经网络、循环神经网络和注意力机制的新闻推荐模型逐渐成为主流。尤其是在新闻标题较短、内容更新频繁的场景中，如何利用文本语义与点击序列高效构造用户表示，成为研究重点。
+
+近年来，预训练语言模型的兴起显著提升了文本表示质量。BERT 及其衍生模型能够在大规模语料上学习更强的上下文语义信息，被广泛用于推荐系统中的文本编码任务。基于此，利用 Sentence-BERT 等模型对新闻标题与摘要进行语义向量化，可以减少端到端文本训练成本，并增强模型对新闻语义的理解能力。同时，用户兴趣建模也从简单的平均聚合逐步演化到基于自注意力机制的动态兴趣提取，从而更准确地刻画用户在不同历史点击中的偏好差异。
+
+\subsubsection{联邦学习与隐私保护研究现状}
+\zihao{-4}
+联邦学习最早由 Google 提出，其核心目标是在不集中收集原始数据的条件下，通过分布式客户端协同训练共享模型。McMahan 等人提出的 FedAvg 算法证明了局部训练与全局聚合相结合的可行性，成为后续联邦学习研究的重要基础。此后，大量研究围绕通信压缩、客户端选择、异构数据建模、安全聚合以及差分隐私增强等方向展开，推动了联邦学习从理论研究走向实际应用。
+
+在推荐系统领域，联邦学习的挑战主要集中于三个方面：一是客户端数据通常呈现明显的 Non-IID 特征，导致训练收敛速度变慢、模型性能波动增大；二是推荐模型经常包含高维嵌入与复杂神经结构，参数传输带来较高通信开销；三是仅依靠参数不上传并不足以完全消除隐私风险，模型更新中仍可能蕴含用户信息，因此需要结合差分隐私或安全聚合等手段进一步增强保护能力。围绕这些问题，本文选择在新闻推荐场景中构建联邦实验系统，并通过主实验、DP 实验、Non-IID 实验与半同态加密原型设计进行综合分析。
+
+\subsection{本文主要研究内容}
+\zihao{-4}
+围绕基于联邦学习的隐私保护新闻推荐问题，本文主要完成了以下几方面工作：
+
+\begin{enumerate}
+\item 基于 MINDsmall 数据集构建新闻推荐实验环境，完成新闻文本语义向量提取、用户行为数据解析、训练样本构造及验证集生成。
+\item 设计并实现结合 SBERT 与多头自注意力机制的新闻推荐模型，构建新闻表示、用户表示与候选排序的完整流程。
+\item 基于 Flower 框架构建联邦训练系统，实现多客户端参与、参数聚合、多轮通信训练与服务器端统一评估。
+\item 通过差分隐私噪声实验、消融实验与 Non-IID 实验，验证模型结构设计的合理性以及方法在不同隐私与数据分布条件下的表现。
+\item 结合训练耗时、模型大小与通信量估算，对联邦训练的系统开销进行分析，并设计一个半同态加密安全聚合原型作为隐私保护扩展方案。
+\end{enumerate}
+
+\subsection{论文组织结构}
+\zihao{-4}
+全文共分为六个部分。第 1 节为绪论，介绍研究背景、研究意义、国内外研究现状以及本文主要工作。第 2 节对相关技术进行综述，重点介绍自然语言处理技术、联邦学习理论与文本特征提取方法。第 3 节给出基于联邦学习的新闻推荐模型设计，包括模型结构、目标函数和训练机制。第 4 节说明系统实现与实验设置，包括数据预处理流程、联邦训练流程及安全聚合原型。第 5 节展示并分析实验结果，涵盖中心化基线、联邦主实验、差分隐私实验、消融实验、Non-IID 实验以及开销分析。第 6 节对全文工作进行总结，并给出未来研究展望。
+
+\newpage
+\fancyhead[RH]{\songti\zihao{-5} 2\quad 相关技术综述}
+\section{相关技术综述}
+\subsection{自然语言处理与文本表示技术}
+\zihao{-4}
+新闻推荐任务中的一个核心问题是如何将离散文本映射为可训练的连续向量表示。传统的词袋模型和 TF-IDF 方法虽然实现简单，但只能反映词频统计特征，难以建模深层语义关系。随着深度学习的发展，基于神经网络的词向量表示与上下文编码方法逐步成为主流。尤其是在新闻标题与摘要的语义建模中，预训练语言模型能够显著提升新闻内容理解能力。
+
+Transformer 架构通过自注意力机制打破了传统序列模型的局限，其基本计算形式可表示为
+\begin{equation}
+\mathrm{Attention}(Q,K,V)=\mathrm{Softmax}\left(\frac{QK^{T}}{\sqrt{d_k}}\right)V,
+\end{equation}
+其中，$Q$、$K$、$V$ 分别表示查询矩阵、键矩阵和值矩阵，$d_k$ 表示键向量维度。多头注意力机制可在不同子空间中学习序列内部的关联关系，适合处理用户历史点击中的长期依赖与兴趣差异。
+
+在本文中，新闻文本表示采用 Sentence-BERT 进行离线特征提取。设新闻文本为 $x$，则其向量表示可写为
+\begin{equation}
+\mathbf{e}_x=\mathrm{SBERT}(x),
+\end{equation}
+其中 $\mathbf{e}_x \in \mathbb{R}^{d}$ 为新闻向量，本文实验中 $d=384$。通过预先提取新闻向量，可以有效降低联邦训练过程中端到端文本建模的计算与通信负担。
+
+\subsection{联邦学习理论基础}
+\zihao{-4}
+联邦学习通过多个客户端协同训练共享模型，其目标是在不汇总原始数据的条件下最小化全局损失函数。设共有 $K$ 个客户端，第 $k$ 个客户端拥有 $n_k$ 条样本，总样本数为 $n=\sum_{k=1}^{K}n_k$，则全局优化目标可表示为
+\begin{equation}
+\min_{\mathbf{w}} F(\mathbf{w})=\sum_{k=1}^{K}\frac{n_k}{n}F_k(\mathbf{w}),
+\end{equation}
+其中 $\mathbf{w}$ 表示模型参数，$F_k(\mathbf{w})$ 表示第 $k$ 个客户端上的局部损失函数。
+
+FedAvg 算法是联邦学习中最经典的聚合方法。对第 $t$ 轮训练而言，服务器首先下发全局参数 $\mathbf{w}_t$，客户端在本地执行若干步梯度更新：
+\begin{equation}
+\mathbf{w}_{t+1}^{(k)}=\mathbf{w}_{t}-\eta \nabla F_k(\mathbf{w}_t),
+\end{equation}
+其中 $\eta$ 表示学习率。随后服务器根据客户端样本量对局部模型进行加权聚合：
+\begin{equation}
+\mathbf{w}_{t+1}=\sum_{k=1}^{K}\frac{n_k}{n}\mathbf{w}_{t+1}^{(k)}.
+\end{equation}
+该过程通过多轮迭代实现全局模型收敛。
+
+\subsection{差分隐私与安全聚合概述}
+\zihao{-4}
+虽然联邦学习避免了原始数据直接上传，但客户端上传的梯度或参数更新仍可能泄露部分用户信息。因此，在联邦推荐系统中引入额外的隐私增强机制具有必要性。差分隐私的基本思想是在统计结果或模型更新中加入噪声，使外部攻击者难以通过输出结果反推出单个样本的敏感信息。本文采用较轻量的梯度裁剪与高斯噪声注入策略，对不同噪声强度下的模型表现进行比较。
+
+除差分隐私外，安全聚合也是联邦学习中常用的保护手段。其目标是在服务器不可见单个客户端明文更新的情况下，仍能完成参数求和或平均。本文进一步设计了一个基于 Paillier 加法同态特性的半同态加密原型，用于说明安全聚合在联邦推荐场景中的可扩展性。
+
+\subsection{本章小结}
+\zihao{-4}
+本节从文本表示、联邦学习和隐私增强三个角度对本文研究涉及的核心技术进行了综述。上述技术为后续新闻推荐模型设计、联邦训练流程构建以及安全扩展原型设计奠定了理论基础。
+
+\newpage
+\fancyhead[RH]{\songti\zihao{-5} 3\quad 模型设计与方法}
+\section{模型设计与方法}
+\subsection{总体框架}
+\zihao{-4}
+本文提出的新闻推荐方法采用“新闻表示塔 + 用户表示塔”的双塔结构。新闻表示塔负责将新闻标题与摘要映射为稠密向量，用户表示塔负责基于历史点击序列提取用户兴趣表示，最终通过用户向量与候选新闻向量的匹配分数完成排序预测。
+
+\begin{figure}[H]
+\centering
+\begin{tikzpicture}[scale=0.95]
+\draw (0,0) rectangle (3,1) node[pos=.5]{新闻标题/摘要};
+\draw (0,-2) rectangle (3,-1) node[pos=.5]{历史点击序列};
+\draw (4,0) rectangle (7,1) node[pos=.5]{SBERT新闻编码};
+\draw (4,-2) rectangle (7,-1) node[pos=.5]{注意力用户编码};
+\draw (8,-0.5) rectangle (11,0.5) node[pos=.5]{匹配与排序};
+\draw[->] (3,0.5)--(4,0.5);
+\draw[->] (3,-1.5)--(4,-1.5);
+\draw[->] (7,0.5)--(8,0.15);
+\draw[->] (7,-1.5)--(8,-0.15);
+\end{tikzpicture}
+\caption{本文新闻推荐模型总体框架}
+\end{figure}
+
+\subsection{新闻表示模块}
+\zihao{-4}
+设第 $i$ 条新闻文本为 $x_i$，通过离线 SBERT 编码得到其向量表示 $\mathbf{e}_i \in \mathbb{R}^{384}$。考虑到联邦训练阶段的效率需求，本文不在联邦过程中直接训练新闻文本编码器，而是将新闻语义向量预先保存为嵌入矩阵，在训练时通过新闻编号索引直接读取对应向量。该设计既保留了较强的文本语义表达能力，又显著降低了联邦训练的本地计算与通信负担。
+
+\subsection{用户表示模块}
+\zihao{-4}
+对于给定用户，设其历史点击新闻向量序列为
+\begin{equation}
+\mathbf{H}=[\mathbf{e}_{1},\mathbf{e}_{2},\ldots,\mathbf{e}_{L}] \in \mathbb{R}^{L \times d},
+\end{equation}
+其中 $L$ 表示历史序列长度，$d$ 表示新闻向量维度。本文采用多头自注意力机制对该序列进行建模，以刻画不同历史点击对当前兴趣的贡献差异。经过自注意力计算后，得到增强后的历史表示 $\mathbf{H}'$，再进行均值聚合得到用户向量：
+\begin{equation}
+\mathbf{u}=\frac{1}{L}\sum_{j=1}^{L}\mathbf{h}'_j,
+\end{equation}
+其中 $\mathbf{h}'_j$ 表示注意力输出序列中的第 $j$ 个向量。
+
+为了验证该注意力聚合方式的有效性，本文进一步设计了消融实验，将上述模块替换为简单的均值池化方式，即直接对原始历史点击向量序列求平均，以比较两种用户建模方式的性能差异。
+
+\subsection{匹配与排序模块}
+\zihao{-4}
+设某一时刻的候选新闻集合表示为 $\mathbf{C}=[\mathbf{c}_1,\mathbf{c}_2,\ldots,\mathbf{c}_m]$，其中 $\mathbf{c}_i \in \mathbb{R}^{d}$。本文使用用户向量与候选新闻向量之间的点积作为匹配分数：
+\begin{equation}
+s_i=\mathbf{u}^{T}\mathbf{c}_i.
+\end{equation}
+对于一个包含正样本与若干负样本的候选集，采用交叉熵损失函数进行优化：
+\begin{equation}
+\mathcal{L}=-\log \frac{\exp(s^{+})}{\exp(s^{+})+\sum_{j=1}^{m-1}\exp(s_j^{-})},
+\end{equation}
+其中 $s^{+}$ 表示正样本得分，$s_j^{-}$ 表示第 $j$ 个负样本得分。
+
+\subsection{联邦训练与隐私增强策略}
+\zihao{-4}
+在联邦训练阶段，服务器在每一轮选择部分客户端参与训练，并将当前全局模型参数广播给选中的客户端。客户端在本地使用自身点击数据进行若干批次训练，完成局部更新后将模型参数上传给服务器。服务器采用 FedAvg 进行聚合，得到新的全局模型。
+
+为增强隐私保护能力，本文在本地训练过程中引入梯度裁剪操作，并在客户端上传参数前加入高斯噪声。设客户端本地更新后的参数为 $\mathbf{w}_k$，加入噪声后的上传参数表示为
+\begin{equation}
+\tilde{\mathbf{w}}_k=\mathbf{w}_k+\mathcal{N}(0,\sigma^2 \mathbf{I}),
+\end{equation}
+其中 $\sigma$ 表示噪声强度。通过设置不同的 $\sigma$ 值，本文对无噪声、轻量噪声和较大噪声三种情况进行了对比实验。
+
+\subsection{本章小结}
+\zihao{-4}
+本节详细介绍了本文所提出的新闻推荐模型设计与联邦训练方法，包括新闻向量表示、用户兴趣注意力建模、候选排序、差分隐私增强策略等内容。这些设计共同构成了后续实验验证的核心方法基础。
+
+\newpage
+\fancyhead[RH]{\songti\zihao{-5} 4\quad 系统实现与实验设置}
+\section{系统实现与实验设置}
+\subsection{数据预处理流程}
+\zihao{-4}
+本文使用 MINDsmall 数据集进行实验。数据预处理流程主要包括三部分：第一，读取训练集与验证集中的新闻文本数据，并通过 SBERT 提取标题与摘要的联合语义向量；第二，解析用户行为日志，将新闻编号映射为向量索引，并构造训练样本中的历史点击序列与候选新闻集合；第三，按照不同实验需求生成联邦客户端数据，包括随机用户划分形成的 IID 式客户端数据，以及按用户主偏好类别划分形成的 Non-IID 客户端数据。
+
+\subsection{联邦实验设置}
+\zihao{-4}
+本文在 Flower 框架下构建联邦训练系统，共模拟 50 个客户端。每轮训练随机选择 20\% 的客户端参与聚合，即约 10 个客户端。默认联邦轮数为 10 轮，局部训练 batch size 为 32，学习率设置为 0.001。考虑到实验环境稳定性，本地实验中主要使用 CPU 进行联邦仿真，并统一在服务器端完成模型评估与结果记录。
+
+\begin{table}[H]
+\centering
+\caption{联邦训练主要参数设置}
+\small
+\begin{tabular}{cc}
+\toprule
+参数名称 & 参数取值 \\
+\midrule
+客户端总数 & 50 \\
+每轮采样比例 & 0.2 \\
+每轮参与客户端数 & 10 \\
+联邦训练轮数 & 10 \\
+本地 batch size & 32 \\
+学习率 & 0.001 \\
+噪声强度 $\sigma$ & 0 / 0.001 / 0.01 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\subsection{评价指标与记录方式}
+\zihao{-4}
+本文采用 AUC 与 MRR 作为主要评价指标。AUC 衡量模型区分点击新闻与未点击新闻的能力，MRR 反映正确点击新闻在候选列表中的平均排序位置。为增强实验结果的可复现性，本文在训练脚本中增加了自动记录机制，将关键实验信息写入结构化 CSV 文件，包括逐轮性能指标、最终实验总结、模型保存路径以及实验配置参数。
+
+\subsection{半同态加密原型设计}
+\zihao{-4}
+为了进一步展示联邦训练框架在安全聚合方向上的可扩展性，本文设计了一个基于 Paillier 加法同态特性的教学型原型。设三个客户端的局部参数更新分别为 $\Delta \mathbf{w}_1$、$\Delta \mathbf{w}_2$、$\Delta \mathbf{w}_3$，客户端先对更新进行编码与加密，服务器在密文域中完成聚合，得到
+\begin{equation}
+E(\Delta \mathbf{w}_1) \oplus E(\Delta \mathbf{w}_2) \oplus E(\Delta \mathbf{w}_3)=E(\Delta \mathbf{w}_1+\Delta \mathbf{w}_2+\Delta \mathbf{w}_3),
+\end{equation}
+其中 $E(\cdot)$ 表示加密操作，$\oplus$ 表示密文加法聚合对应的运算。解密后若与明文直接求和结果一致，则说明参数安全聚合原型成立。该部分主要用于说明“安全聚合机制”的可行性，而非完整生产级密码系统实现。
+
+\begin{figure}[H]
+\centering
+\begin{tikzpicture}[scale=0.95]
+\draw (0,0) rectangle (2.5,1) node[pos=.5]{客户端1加密更新};
+\draw (0,-1.5) rectangle (2.5,-0.5) node[pos=.5]{客户端2加密更新};
+\draw (0,-3) rectangle (2.5,-2) node[pos=.5]{客户端3加密更新};
+\draw (4,-1.5) rectangle (7,-0.5) node[pos=.5]{服务器密文聚合};
+\draw (8.5,-1.5) rectangle (11,-0.5) node[pos=.5]{可信方解密验证};
+\draw[->] (2.5,0.5)--(4,-0.9);
+\draw[->] (2.5,-1)--(4,-1);
+\draw[->] (2.5,-2.5)--(4,-1.1);
+\draw[->] (7,-1)--(8.5,-1);
+\end{tikzpicture}
+\caption{半同态加密安全聚合原型流程示意}
+\end{figure}
+
+\subsection{本章小结}
+\zihao{-4}
+本节介绍了数据预处理、联邦训练配置、评价指标与自动记录机制，并进一步给出了半同态加密安全聚合原型设计。上述内容构成了后续实验结果分析与系统扩展讨论的实现基础。
+
+\newpage
+\fancyhead[RH]{\songti\zihao{-5} 5\quad 实验结果与分析}
+\section{实验结果与分析}
+\subsection{中心化基线与联邦主实验结果分析}
+\zihao{-4}
+为验证联邦新闻推荐方法的有效性，本文首先进行了中心化基线实验，并将其结果与联邦主实验进行比较。中心化基线在验证集上取得了 0.6044 的 AUC 和 0.3126 的 MRR；联邦主实验在 10 轮训练后取得了 0.6411 的 AUC 和 0.5692 的 MRR。结果表明，在当前实验设置下，联邦训练框架能够取得较好的排序性能。
+
+\begin{table}[H]
+\centering
+\caption{中心化基线与联邦主实验对比}
+\small
+\begin{tabular}{ccc}
+\toprule
+实验设置 & AUC & MRR \\
+\midrule
+中心化基线 & 0.6044 & 0.3126 \\
+联邦主实验（IID） & 0.6411 & 0.5692 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+从逐轮变化趋势来看，联邦主实验在第 1 轮后性能快速提升，说明本地更新与全局聚合能够有效学习用户兴趣表示。模型在第 5 轮时达到最佳 AUC 0.6463，随后在第 10 轮略有波动但整体保持稳定，表明联邦模型在较少通信轮数下即可完成有效收敛。
+
+\subsection{差分隐私增强实验分析}
+\zihao{-4}
+在联邦主实验基础上，本文分别设置 $\sigma=0.001$ 与 $\sigma=0.01$ 进行差分隐私增强实验。实验结果如表 \ref{tab:dp} 所示。
+
+\begin{table}[H]
+\centering
+\caption{不同噪声强度下联邦模型性能对比}
+\label{tab:dp}
+\small
+\begin{tabular}{cccc}
+\toprule
+噪声强度 $\sigma$ & Final AUC & Final MRR & Best Round \\
+\midrule
+0 & 0.6411 & 0.5692 & 5 \\
+0.001 & 0.6441 & 0.5734 & 10 \\
+0.01 & 0.6445 & 0.5717 & 10 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+结果显示，引入轻量至中等强度的高斯噪声后，模型性能未出现明显下降。具体而言，$\sigma=0.001$ 时模型最终 AUC 为 0.6441，MRR 为 0.5734；$\sigma=0.01$ 时模型最终 AUC 为 0.6445，MRR 为 0.5717。该结果说明在当前实验设置下，噪声注入并未显著破坏模型的推荐能力，表明本文方法在隐私增强场景下具有一定鲁棒性。但考虑到不同设置间差异幅度较小，本文更倾向于将其解释为“性能未明显退化”，而非“噪声显著提升性能”。
+
+\subsection{消融实验分析}
+\zihao{-4}
+为验证注意力机制在用户兴趣建模中的作用，本文将完整模型中的注意力聚合模块替换为简单的均值池化方式，构造联邦消融实验。实验结果显示，消融模型在第 10 轮时的 AUC 仅为 0.5212，MRR 为 0.4751，明显低于完整联邦模型的 0.6411 和 0.5692。
+
+\begin{table}[H]
+\centering
+\caption{完整模型与消融模型性能对比}
+\small
+\begin{tabular}{ccc}
+\toprule
+模型 & AUC & MRR \\
+\midrule
+完整联邦模型（Attention） & 0.6411 & 0.5692 \\
+消融模型（Mean Pooling） & 0.5212 & 0.4751 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+由此可见，简单平均历史点击向量无法充分刻画用户兴趣差异，而注意力机制能够更有效地区分不同历史新闻对当前兴趣表示的贡献，因而是本文模型取得较好性能的重要原因。
+
+\subsection{Non-IID 实验分析}
+\zihao{-4}
+为了模拟更贴近真实联邦场景的数据分布，本文进一步构造了基于用户主偏好类别划分的 Non-IID 客户端数据，并进行了联邦训练实验。结果表明，Non-IID 设置下模型在第 10 轮取得了 0.6336 的 AUC 和 0.5633 的 MRR，略低于 IID 条件下联邦主实验的 0.6411 和 0.5692。
+
+\begin{table}[H]
+\centering
+\caption{IID 与 Non-IID 联邦实验结果对比}
+\small
+\begin{tabular}{ccc}
+\toprule
+数据划分方式 & AUC & MRR \\
+\midrule
+IID & 0.6411 & 0.5692 \\
+Non-IID & 0.6336 & 0.5633 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+从逐轮指标来看，Non-IID 设置在前期收敛速度明显慢于 IID 条件，例如第 1 轮时 AUC 仅为 0.5620，而 IID 主实验第 1 轮 AUC 已达到 0.6212。这说明客户端之间的数据分布差异会加大联邦训练的不稳定性。但在第 5 轮时，Non-IID 条件下模型仍可达到 0.6447 的 AUC，说明所提出方法对分布异质性具有一定适应能力。
+
+\subsection{训练与通信开销分析}
+\zihao{-4}
+除性能指标外，本文进一步统计了不同实验设置下的训练总耗时、模型大小和通信量估算结果，如表 \ref{tab:overhead} 所示。
+
+\begin{table}[H]
+\centering
+\caption{不同实验设置下的训练与通信开销对比}
+\label{tab:overhead}
+\small
+\begin{tabular}{ccccc}
+\toprule
+实验设置 & 总耗时/s & 模型大小/MB & 每轮通信量/MB & 总通信量/MB \\
+\midrule
+中心化基线 & 70.02 & 2.2582 & 0 & 0 \\
+联邦主实验（IID） & 556.91 & 2.2583 & 45.17 & 451.66 \\
+联邦 DP（0.001） & 526.39 & 2.2583 & 45.17 & 451.66 \\
+联邦 DP（0.01） & 988.47 & 2.2583 & 45.17 & 451.66 \\
+联邦消融 & 341.50 & 0.0011 & 0.02 & 0.02 \\
+联邦 Non-IID & 907.99 & 2.2584 & 45.17 & 451.67 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+结果表明，联邦训练相较中心化训练具有更高的时间成本与通信成本。IID 条件下主实验总耗时为 556.91s，而 Non-IID 条件下增加至 907.99s，说明异构数据分布会进一步提高联邦训练代价。对于完整注意力模型而言，单个 checkpoint 大小约为 2.26MB，在每轮选择 10 个客户端参与训练的条件下，每轮估算通信量约为 45.17MB。该结果说明，尽管本文方法在推荐效果上取得了较好表现，但在面向更大规模实际部署时仍需进一步优化通信效率与训练成本。
+
+\subsection{本章小结}
+\zihao{-4}
+本节围绕中心化基线、联邦主实验、差分隐私增强、消融实验、Non-IID 实验以及系统开销等多个方面，对本文方法进行了较全面的实验验证。实验结果表明，本文提出的联邦新闻推荐方法在当前实验设置下具有较好的推荐性能，并在一定噪声范围内保持了稳定性；注意力机制对用户兴趣建模具有重要作用；在 Non-IID 场景下模型仍具备一定收敛能力；同时，联邦训练引入的时间与通信开销也需要在后续研究中持续优化。
+
+\newpage
+\fancyhead[RH]{\songti\zihao{-5} 6\quad 结论与展望}
+\section{结论与展望}
+\subsection{主要结论}
+\zihao{-4}
+本文围绕基于联邦学习的隐私保护新闻推荐问题，完成了一个较完整的实验系统设计与实现，并得出以下主要结论：
+
+\begin{enumerate}
+\item 结合 SBERT 新闻表示与多头自注意力用户建模的双塔结构，能够在新闻推荐任务中取得较好的排序效果。
+\item 基于 Flower 构建的联邦训练流程在当前实验设置下表现稳定，联邦主实验取得了优于本次中心化基线的结果。
+\item 在联邦训练过程中加入轻量级高斯噪声后，模型性能未出现明显下降，说明方法在一定范围内具有隐私增强可行性。
+\item 消融实验表明，注意力机制在用户兴趣建模中发挥了关键作用，去除该模块后模型性能显著下降。
+\item Non-IID 实验表明，在更贴近真实联邦场景的分布异质条件下，模型性能虽有一定下降，但仍保持较好的收敛能力。
+\item 基于 Paillier 的半同态加密原型验证了密文加法聚合的可行性，为联邦推荐系统中的安全聚合扩展提供了实验参考。
+\end{enumerate}
+
+\subsection{不足与展望}
+\zihao{-4}
+尽管本文已经从多个角度验证了方法的合理性，但仍存在一些不足。首先，当前实验主要基于 MINDsmall 数据集和模拟客户端场景，规模相对有限，未来可以在更大规模数据与更复杂终端环境中进一步验证方法的有效性。其次，本文采用的差分隐私增强方式仍较为初步，尚未建立严格的隐私预算分析框架，后续可结合更系统的 DP-SGD 或 client-level DP 方法进行拓展。再次，虽然本文对训练与通信开销进行了估算，但尚未引入参数压缩、稀疏更新或自适应客户端选择等优化手段，未来可围绕通信效率提升继续深入研究。最后，半同态加密部分当前仍停留在教学型原型验证阶段，后续可考虑将其与联邦训练主流程更紧密地结合，构建更完整的安全聚合系统。
+
+\newpage
+\fancyhead[RH]{\songti\zihao{-5} 参考文献}
+\addcontentsline{toc}{section}{参考文献}
+\renewcommand\refname{参考文献}
+\begin{thebibliography}{99}
+\zihao{5}
+\setlength{\itemsep}{0pt}
+\bibitem{gdpr} European Parliament. General Data Protection Regulation (GDPR)[S]. 2016.
+\bibitem{pipl} 中华人民共和国全国人民代表大会常务委员会. 中华人民共和国个人信息保护法[S]. 2021.
+\bibitem{mcmahan2017} McMahan B, Moore E, Ramage D, et al. Communication-Efficient Learning of Deep Networks from Decentralized Data[A]. In: Proceedings of AISTATS[C]. 2017: 1273-1282.
+\bibitem{devlin2019} Devlin J, Chang M W, Lee K, et al. BERT: Pre-training of Deep Bidirectional Transformers for Language Understanding[A]. In: Proceedings of NAACL[C]. 2019: 4171-4186.
+\bibitem{reimers2019} Reimers N, Gurevych I. Sentence-BERT: Sentence Embeddings using Siamese BERT-Networks[A]. In: Proceedings of EMNLP-IJCNLP[C]. 2019: 3982-3992.
+\bibitem{wu2020mind} Wu F, Qiao Y, Chen J H, et al. MIND: A Large-scale Dataset for News Recommendation[A]. In: Proceedings of ACL[C]. 2020: 3597-3606.
+\bibitem{wu2019nrms} Wu C, Wu F, Qi T, et al. Neural News Recommendation with Multi-Head Self-Attention[A]. In: Proceedings of EMNLP-IJCNLP[C]. 2019: 6390-6395.
+\bibitem{kairouz2021} Kairouz P, McMahan H B, Avent B, et al. Advances and Open Problems in Federated Learning[J]. Foundations and Trends in Machine Learning, 2021, 14(1-2): 1-210.
+\bibitem{bonawitz2017} Bonawitz K, Ivanov V, Kreuter B, et al. Practical Secure Aggregation for Privacy-Preserving Machine Learning[A]. In: Proceedings of CCS[C]. 2017: 1175-1191.
+\bibitem{paillier1999} Paillier P. Public-Key Cryptosystems Based on Composite Degree Residuosity Classes[A]. In: Proceedings of EUROCRYPT[C]. 1999: 223-238.
+\end{thebibliography}
+
+\newpage
+\fancyhead[RH]{\songti\zihao{-5} 附录A：安全聚合原型补充说明}
+\addcontentsline{toc}{section}{附录A：安全聚合原型补充说明}
+\section*{附录A：安全聚合原型补充说明}
+\zihao{-4}
+为增强联邦训练场景中的参数安全性，本文设计了一个基于 Paillier 加法同态特性的原型脚本。该原型将客户端局部更新编码为整数后分别加密，服务器仅对密文进行逐元素加法聚合，最终由可信方解密恢复聚合结果。在原型演示中，解密后的聚合结果与明文直接求和结果完全一致，从而说明该安全聚合思路在概念上是可行的。
+
+设三个客户端的局部更新分别为 $\Delta \mathbf{w}_1,\Delta \mathbf{w}_2,\Delta \mathbf{w}_3$，则服务器端的密文聚合过程满足
+\begin{equation}
+E(\Delta \mathbf{w}_1) \cdot E(\Delta \mathbf{w}_2) \cdot E(\Delta \mathbf{w}_3)=E(\Delta \mathbf{w}_1+\Delta \mathbf{w}_2+\Delta \mathbf{w}_3).
+\end{equation}
+该原型主要用于说明未来可将安全聚合机制引入联邦推荐系统训练流程，以进一步增强模型更新传输过程中的隐私保护能力。
+
+\newpage
+\fancyhead[RH]{\songti\zihao{-5} 致谢}
+\addcontentsline{toc}{section}{致谢}
+\section*{致\quad 谢}
+\zihao{-4}
+在本次毕业论文的选题、实验实现和论文撰写过程中，我得到了许多老师、同学和家人的帮助与支持。在此，谨向所有给予我指导与帮助的人表示诚挚感谢。
+
+首先，衷心感谢指导教师蔡斌老师在论文选题、研究思路、实验设计和论文修改等方面给予的耐心指导。老师严谨认真的治学态度和细致负责的工作作风，使我在完成毕业论文的过程中受益匪浅。
+
+同时，感谢学院老师在课程学习和毕业设计阶段给予的培养与帮助，也感谢同学们在实验调试、资料交流和论文修改过程中提供的支持与建议。
+
+最后，感谢家人在本科阶段对我学习和生活的理解、鼓励与陪伴。正是因为他们的支持，我才能顺利完成本次毕业论文工作。
+
+\newpage
+\thispagestyle{empty}
+\addcontentsline{toc}{section}{原创性声明和使用授权书}
+\begin{center}
+\heiti \zihao{3} 原创性声明
+\end{center}
+
+\songti\zihao{-4}
+郑重声明：所呈交的论文（设计）是本人在导师的指导下，独立进行研究取得的成果。除论文（设计）中已经标明引用的内容外，本论文（设计）不包含其他个人或集体已经发表或撰写过的作品成果。对本文的研究做出贡献的个人和集体，均已在文中以明确方式标明。本人完全意识到本声明的法律后果，并承诺因本声明而产生的法律结果由本人承担。
+
+\vspace{2em}
+\begin{flushleft}
+\songti\zihao{-4}
+论文（设计）作者签名：\underline{\hspace{6em}}\\
+日期：\underline{\hspace{6em}}
+\end{flushleft}
+
+\vspace{2em}
+\begin{center}
+\heiti \zihao{3} 使用授权书
+\end{center}
+
+\songti\zihao{-4}
+本论文（设计）作者完全了解学校有关保留、使用论文（设计）的规定，同意学校保留并向国家有关部门或机构送交论文（设计）复印件和电子版，允许论文（设计）被查阅和借阅。本人授权重庆大学将本论文（设计）的全部或部分内容编入有关数据库进行检索，可以采用影印、缩印或扫描等复制方式保存和汇编本论文（设计）。
+
+\vspace{2em}
+\begin{flushleft}
+\songti\zihao{-4}
+论文（设计）作者签名：\underline{\hspace{6em}} \hspace{5em} 指导教师签名：\underline{\hspace{6em}}\\
+日期：\underline{\hspace{6em}} \hspace{11em} 日期：\underline{\hspace{6em}}
+\end{flushleft}
+
+\end{document}

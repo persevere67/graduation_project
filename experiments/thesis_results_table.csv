@@ -1,0 +1,6 @@
+experiment,config,final_auc,final_mrr,best_round,notes
+Centralized Baseline,"attention, 5 epochs",0.604366455516458,0.31258497851798567,,"Offline evaluation on saved checkpoint"
+Federated Main,"attention, sigma=0, 10 rounds",0.6411197101694437,0.5692217147368123,5,"Main federated experiment"
+Federated DP,"attention, sigma=0.001, 10 rounds",0.6441223321773943,0.5734453560386066,10,"Light noise injection"
+Federated DP,"attention, sigma=0.01, 10 rounds",0.64445008317122,0.5717267191068257,10,"Higher noise injection"
+Federated Ablation,"mean pooling, sigma=0, 10 rounds",0.5212474273309087,0.4750582668433468,5,"Attention removed"
